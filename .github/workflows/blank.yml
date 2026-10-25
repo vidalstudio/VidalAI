@@ -1,0 +1,30 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch: # Això activa el botó manual "Run workflow"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout del codi
+        uses: actions/checkout@v4
+
+      - name: Instal·lar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instal·lar dependències
+        run: npm install
+
+      - name: Crear l'instal·lador (.exe)
+        run: npm run dist
+
+      - name: Pujar l'instal·lador com a Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VidalAI-Galactic-Setup
+          path: dist/VidalAI-Galactic-Setup.exe
